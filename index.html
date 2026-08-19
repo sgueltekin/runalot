@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Laufplan · 5K → 15K</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Laufplan">
+<meta name="theme-color" content="#0a0c10">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230a0c10'/%3E%3Ctext x='90' y='118' font-size='84' font-family='Arial' font-weight='bold' fill='%235b8cff' text-anchor='middle'%3E15K%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--surface:#12151c;--surface-2:#181c26;--line:#232935;--text:#eef1f6;--muted:#8a93a6;--faint:#5b6475;
+--easy:#38d39f;--long:#5b8cff;--tempo:#ffab3d;--interval:#ff5d73;--race:#ffd54a;--rt:#a684ff;
+--green:#2fbf71;--red:#ff5d73;--amber:#ffab3d;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+.display{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase}
+#app{max-width:560px;margin:0 auto;padding:0 0 80px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+header{padding:calc(30px + env(safe-area-inset-top)) 20px 22px;
+ background:radial-gradient(120% 90% at 90% -10%,rgba(91,140,255,.18),transparent 60%),radial-gradient(90% 70% at -10% 0%,rgba(56,211,159,.12),transparent 55%),var(--surface);
+ border-bottom:1px solid var(--line)}
+.kicker{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:var(--muted);font-weight:600}
+h1{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;font-size:44px;line-height:.95;margin:6px 0 4px}
+.sub{color:var(--muted);font-size:13.5px}
+.wrap{padding:18px}
+.info{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-bottom:16px;font-size:13px;color:var(--muted);line-height:1.6}
+.info b{color:var(--text)}
+.pbanner{border-radius:16px;padding:14px 16px;margin:18px 0 10px;border:1px solid var(--line)}
+.pbanner.p1{background:linear-gradient(100deg,rgba(56,211,159,.16),rgba(18,21,28,.35))}
+.pbanner.p2{background:linear-gradient(100deg,rgba(91,140,255,.20),rgba(18,21,28,.35))}
+.pph{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:700;color:var(--muted)}
+.ptitle{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;font-size:25px;line-height:1;margin:3px 0 5px}
+.pmeta{font-size:12px;color:#c3cad8}
+details.week{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin-bottom:11px;overflow:hidden}
+summary{list-style:none;cursor:pointer;padding:14px 15px;display:flex;align-items:center;gap:11px}
+summary::-webkit-details-marker{display:none}
+.wknum{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:5px 9px;color:var(--muted);flex:none}
+.wktitle{flex:1;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:600;font-size:17px;letter-spacing:.02em}
+.wkmeta{font-size:11px;color:var(--muted)}
+.chev{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .2s}
+details[open] .chev{transform:rotate(180deg)}
+.wkbody{padding:0 11px 11px}
+.run{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:12px 13px;margin-top:9px;border-left-width:3px}
+.run.easy{border-left-color:var(--easy)}.run.long{border-left-color:var(--long)}
+.run.tempo{border-left-color:var(--tempo)}.run.interval{border-left-color:var(--interval)}.run.race{border-left-color:var(--race)}
+.rhead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.rday{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;color:var(--muted);letter-spacing:.03em;text-transform:uppercase}
+.badge{margin-left:auto;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;font-size:10.5px;letter-spacing:.07em;padding:3px 8px;border-radius:6px}
+.badge.easy{background:rgba(56,211,159,.14);color:var(--easy)}.badge.long{background:rgba(91,140,255,.16);color:var(--long)}
+.badge.tempo{background:rgba(255,171,61,.16);color:var(--tempo)}.badge.interval{background:rgba(255,93,115,.16);color:var(--interval)}.badge.race{background:rgba(255,213,74,.16);color:var(--race)}
+.rtitle{font-weight:600;font-size:15px;margin-bottom:3px}
+.rsegs{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:11px}
+.startbtn{width:100%;border:none;border-radius:11px;padding:12px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
+ font-weight:700;font-size:16px;letter-spacing:.05em;color:#08130d;background:var(--easy);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.run.long .startbtn{background:var(--long);color:#07101f}.run.tempo .startbtn{background:var(--tempo);color:#1c1305}
+.run.interval .startbtn{background:var(--interval);color:#210a0f}.run.race .startbtn{background:var(--race);color:#1c1305}
+.startbtn svg{width:16px;height:16px}
+footer{padding:8px 24px 0;color:var(--faint);font-size:11.5px;text-align:center;line-height:1.6}
+/* ---- Player ---- */
+#player{position:fixed;inset:0;background:var(--bg);z-index:50;display:none;flex-direction:column;
+ max-width:560px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom))}
+#player.on{display:flex}
+.ptop{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.ptop .pt{flex:1;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:600;font-size:16px;letter-spacing:.02em}
+.pclose{background:var(--surface-2);border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:6px 10px;font-size:13px;cursor:pointer}
+.segwrap{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+.segcount{font-family:'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--muted);font-weight:700}
+.segname{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;font-size:30px;line-height:1.02;margin:5px 0 6px}
+.segcue{font-size:13.5px;color:#c3cad8}
+.segbig{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:64px;line-height:1;margin:12px 0 8px;letter-spacing:.01em}
+.segbar{height:8px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.segbar>div{height:100%;width:0;background:var(--long);border-radius:6px;transition:width .25s linear}
+.ampel{margin-top:14px;border:2px solid var(--line);border-radius:16px;padding:16px;text-align:center;transition:background .2s,border-color .2s}
+.ampel .albl{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:700;color:var(--muted)}
+.ampel .apace{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:58px;line-height:1;margin-top:2px}
+.ampel .astate{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;font-size:15px;letter-spacing:.05em;margin-top:2px}
+.ampel.green{background:rgba(47,191,113,.15);border-color:var(--green)}
+.ampel.red{background:rgba(255,93,115,.15);border-color:var(--red)}
+.ampel.amber{background:rgba(255,171,61,.15);border-color:var(--amber)}
+.ampel.grey{background:var(--surface);border-color:var(--line)}
+.astate.green{color:var(--green)}.astate.red{color:var(--red)}.astate.amber{color:var(--amber)}.astate.grey{color:var(--muted)}
+.mrow{display:flex;gap:10px;margin-top:12px}
+.mcell{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:11px;text-align:center}
+.mcell .ml{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:10px;color:var(--muted);font-weight:700}
+.mcell .mv{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:28px;line-height:1.05;margin-top:2px}
+.pctrl{margin-top:auto;display:flex;gap:10px;padding-top:14px}
+.pctrl button{flex:1;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:13px;padding:15px 8px;
+ font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;font-size:15px;letter-spacing:.04em;cursor:pointer}
+.pctrl .stop{background:rgba(255,93,115,.16);border-color:var(--red);color:var(--red)}
+.pctrl .skip{flex:.8}
+.hint{margin-top:10px;font-size:11.5px;color:var(--faint);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<div id="player">
+ <div class="ptop">
+   <div class="pt" id="p-title">Lauf</div>
+   <button class="pclose" id="p-min">Plan</button>
+ </div>
+ <div class="segwrap">
+   <div class="segcount" id="p-segcount">Abschnitt 1 / 1</div>
+   <div class="segname" id="p-segname">–</div>
+   <div class="segcue" id="p-segcue"></div>
+   <div class="segbig" id="p-segbig">0:00</div>
+   <div class="segbar"><div id="p-segprog"></div></div>
+ </div>
+ <div class="ampel grey" id="p-ampel">
+   <div class="albl">Aktuelle Pace</div>
+   <div class="apace" id="p-pace">--:--</div>
+   <div class="astate grey" id="p-state">warte auf GPS…</div>
+ </div>
+ <div class="mrow">
+   <div class="mcell"><div class="ml">Gesamtzeit</div><div class="mv" id="p-time">0:00</div></div>
+   <div class="mcell"><div class="ml">Distanz</div><div class="mv" id="p-dist">0,00</div></div>
+   <div class="mcell"><div class="ml">Ø Pace</div><div class="mv" id="p-avg">--:--</div></div>
+ </div>
+ <div class="hint" id="p-hint">Bildschirm anlassen – im Hintergrund stoppt iOS die Messung.</div>
+ <div class="pctrl">
+   <button class="skip" id="p-skip">Abschnitt&nbsp;weiter</button>
+   <button id="p-pause">Pause</button>
+   <button class="stop" id="p-stop">Stopp</button>
+ </div>
+</div>
+
+<div id="summary" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:60;max-width:560px;margin:0 auto;padding:calc(30px + env(safe-area-inset-top)) 20px 20px;overflow:auto"></div>
+
+<script>const PLAN={"weeks":[{"num":"W1","title":"Grundlagen","dates":"13.–16. Aug","phase":1,"vol":"~9 km","runs":[{"id":1,"type":"easy","label":"Dauerlauf","day":"Do","date":"13. Aug","title":"4 km locker eingrooven","disp":"≈ 4 km","segments":[{"name":"4 km locker eingrooven","kind":"run","mode":"distance","dist":4000,"lo":540,"hi":615,"cue":"Von Minute 1 langsam. ~9:00–9:45"}]},{"id":2,"type":"long","label":"Langer Lauf","day":"So","date":"16. Aug","title":"5 km ruhig","disp":"≈ 5 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":5000,"lo":570,"hi":630,"cue":"entspannt · ~9:00–9:45"}]}]},{"num":"W2","title":"Intervall-Einstieg","dates":"17.–23. Aug","phase":1,"vol":"~11 km","runs":[{"id":3,"type":"interval","label":"Intervalle","day":"Do","date":"20. Aug","title":"Intervalle","disp":"≈ 5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"1 min zügig (1/6)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (2/6)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (3/6)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (4/6)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (5/6)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (6/6)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":4,"type":"long","label":"Langer Lauf","day":"So","date":"23. Aug","title":"6 km locker","disp":"≈ 6 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":6000,"lo":570,"hi":630,"cue":"Wohlfühltempo · ~9:00–9:45"}]}]},{"num":"W3","title":"Tempo-Einstieg","dates":"24.–30. Aug","phase":1,"vol":"~12,5 km","runs":[{"id":5,"type":"tempo","label":"Tempo","day":"Do","date":"27. Aug","title":"Tempolauf","disp":"≈ 5,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"6 min Tempo (1/2)","kind":"run","mode":"time","dur":360,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"6 min Tempo (2/2)","kind":"run","mode":"time","dur":360,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":6,"type":"long","label":"Langer Lauf","day":"So","date":"30. Aug","title":"6,5 km locker","disp":"≈ 6,5 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":6500,"lo":570,"hi":630,"cue":"~9:00–9:45"}]}]},{"num":"W4","title":"Entlastung","dates":"31. Aug–6. Sep","phase":1,"vol":"~9,5 km","runs":[{"id":7,"type":"interval","label":"Intervalle","day":"Do","date":"3. Sep","title":"Intervalle","disp":"≈ 4,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"1 min zügig (1/5)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (2/5)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (3/5)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (4/5)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"1 min zügig (5/5)","kind":"run","mode":"time","dur":60,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":8,"type":"long","label":"Langer Lauf","day":"So","date":"6. Sep","title":"5 km ganz ruhig","disp":"≈ 5 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":5000,"lo":570,"hi":630,"cue":"Erholung · ~9:30–10:00"}]}]},{"num":"W5","title":"Progression","dates":"7.–13. Sep","phase":1,"vol":"~13 km","runs":[{"id":9,"type":"tempo","label":"Tempo","day":"Do","date":"10. Sep","title":"Tempolauf","disp":"≈ 6 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"8 min Tempo (1/2)","kind":"run","mode":"time","dur":480,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"8 min Tempo (2/2)","kind":"run","mode":"time","dur":480,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":10,"type":"long","label":"Langer Lauf","day":"So","date":"13. Sep","title":"7 km locker","disp":"≈ 7 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":7000,"lo":570,"hi":630,"cue":"~9:00–9:45"}]}]},{"num":"W6","title":"Schärfung","dates":"14.–20. Sep","phase":1,"vol":"~13,5 km","runs":[{"id":11,"type":"interval","label":"Intervalle","day":"Do","date":"17. Sep","title":"Intervalle","disp":"≈ 6 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"2 min schnell (1/5)","kind":"run","mode":"time","dur":120,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"2 min schnell (2/5)","kind":"run","mode":"time","dur":120,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"2 min schnell (3/5)","kind":"run","mode":"time","dur":120,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"2 min schnell (4/5)","kind":"run","mode":"time","dur":120,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"2 min schnell (5/5)","kind":"run","mode":"time","dur":120,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":12,"type":"long","label":"Langer Lauf","day":"So","date":"20. Sep","title":"7,5 km locker","disp":"≈ 7,5 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":7500,"lo":570,"hi":630,"cue":"~9:00–9:45"}]}]},{"num":"W7","title":"Renn-Vorbereitung","dates":"21.–27. Sep","phase":1,"vol":"~13,5 km","runs":[{"id":13,"type":"tempo","label":"Tempo","day":"Do","date":"24. Sep","title":"Tempolauf","disp":"≈ 5,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"15 min am Stück","kind":"run","mode":"time","dur":900,"lo":520,"hi":545,"cue":"8:30–8:55"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":14,"type":"long","label":"Langer Lauf","day":"So","date":"27. Sep","title":"8 km locker","disp":"≈ 8 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":8000,"lo":570,"hi":630,"cue":"Peak · ~9:00–9:45"}]}]},{"num":"W8","title":"Taper & Renntest","dates":"28. Sep–4. Okt","phase":1,"vol":"~10 km","runs":[{"id":15,"type":"easy","label":"Dauerlauf","day":"Do","date":"1. Okt","title":"Shakeout + Steigerungen","disp":"≈ 3,5 km","segments":[{"name":"locker","kind":"run","mode":"distance","dist":3000,"lo":540,"hi":615,"cue":"locker · ~9:15–10:00"},{"name":"Steigerung (1/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (2/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (3/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (4/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"}]},{"id":16,"type":"race","label":"Renntest 5k","day":"So","date":"4. Okt","title":"5 km all-out 🏁","disp":"≈ 6,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"5 km – volle Distanz","kind":"run","mode":"distance","dist":5000,"lo":480,"hi":525,"cue":"8:00–8:45 · erste 2 km kontrolliert!"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":500,"lo":540,"hi":615,"cue":"locker oder langsamer"}]}]},{"num":"W9","title":"Wiedereinstieg","dates":"5.–10. Okt","phase":2,"vol":"~17,5 km","runs":[{"id":17,"type":"easy","label":"Dauerlauf","day":"Mo","date":"5. Okt","title":"4 km locker","disp":"≈ 4 km","segments":[{"name":"4 km locker","kind":"run","mode":"distance","dist":4000,"lo":540,"hi":615,"cue":"Wiedereinstieg · ~9:15–10:00"}]},{"id":18,"type":"tempo","label":"Tempo","day":"Mi","date":"7. Okt","title":"Tempolauf","disp":"≈ 5,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"6 min Tempo (1/2)","kind":"run","mode":"time","dur":360,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"6 min Tempo (2/2)","kind":"run","mode":"time","dur":360,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":19,"type":"long","label":"Langer Lauf","day":"Sa","date":"10. Okt","title":"8 km locker","disp":"≈ 8 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":8000,"lo":570,"hi":630,"cue":"locker · ~9:30–10:15"}]}]},{"num":"W10","title":"Aufbau","dates":"12.–17. Okt","phase":2,"vol":"~20,5 km","runs":[{"id":20,"type":"easy","label":"Dauerlauf","day":"Mo","date":"12. Okt","title":"5 km locker","disp":"≈ 5 km","segments":[{"name":"5 km locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"reine Erholung · ~9:15–10:00"}]},{"id":21,"type":"interval","label":"Intervalle","day":"Mi","date":"14. Okt","title":"Intervalle","disp":"≈ 6,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"3 min zügig (1/5)","kind":"run","mode":"time","dur":180,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"3 min zügig (2/5)","kind":"run","mode":"time","dur":180,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"3 min zügig (3/5)","kind":"run","mode":"time","dur":180,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"3 min zügig (4/5)","kind":"run","mode":"time","dur":180,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"3 min zügig (5/5)","kind":"run","mode":"time","dur":180,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":22,"type":"long","label":"Langer Lauf","day":"Sa","date":"17. Okt","title":"9 km locker","disp":"≈ 9 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":9000,"lo":570,"hi":630,"cue":"locker · ~9:30–10:15"}]}]},{"num":"W11","title":"Progression","dates":"19.–24. Okt","phase":2,"vol":"~21,5 km","runs":[{"id":23,"type":"easy","label":"Dauerlauf","day":"Mo","date":"19. Okt","title":"5 km locker","disp":"≈ 5 km","segments":[{"name":"5 km locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":24,"type":"tempo","label":"Tempo","day":"Mi","date":"21. Okt","title":"Tempolauf","disp":"≈ 6,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"8 min Tempo (1/2)","kind":"run","mode":"time","dur":480,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"8 min Tempo (2/2)","kind":"run","mode":"time","dur":480,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":25,"type":"long","label":"Langer Lauf","day":"Sa","date":"24. Okt","title":"10 km locker","disp":"≈ 10 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":10000,"lo":570,"hi":630,"cue":"locker · ~9:30–10:15"}]}]},{"num":"W12","title":"Entlastung","dates":"26. Okt–1. Nov","phase":2,"vol":"~17,5 km","runs":[{"id":26,"type":"easy","label":"Dauerlauf","day":"Mo","date":"26. Okt","title":"4 km sehr locker","disp":"≈ 4 km","segments":[{"name":"4 km sehr locker","kind":"run","mode":"distance","dist":4000,"lo":540,"hi":615,"cue":"ganz ruhig · ~9:30–10:00"}]},{"id":27,"type":"easy","label":"Dauerlauf","day":"Mi","date":"28. Okt","title":"5 km + Steigerungen","disp":"≈ 5,5 km","segments":[{"name":"locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"locker · ~9:15–10:00"},{"name":"Steigerung (1/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (2/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (3/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (4/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"}]},{"id":28,"type":"long","label":"Langer Lauf","day":"Sa","date":"31. Okt","title":"8 km ruhig","disp":"≈ 8 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":8000,"lo":570,"hi":630,"cue":"locker · ~9:30–10:15"}]}]},{"num":"W13","title":"Renntempo rein","dates":"2.–7. Nov","phase":2,"vol":"~22 km","runs":[{"id":29,"type":"easy","label":"Dauerlauf","day":"Mo","date":"2. Nov","title":"5 km locker","disp":"≈ 5 km","segments":[{"name":"5 km locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":30,"type":"tempo","label":"Tempo","day":"Mi","date":"4. Nov","title":"Tempolauf","disp":"≈ 7 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"6 min Tempo (1/3)","kind":"run","mode":"time","dur":360,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"6 min Tempo (2/3)","kind":"run","mode":"time","dur":360,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"6 min Tempo (3/3)","kind":"run","mode":"time","dur":360,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":31,"type":"long","label":"Langer Lauf","day":"Sa","date":"7. Nov","title":"10 km (Finish schnell)","disp":"≈ 10 km","segments":[{"name":"Langer Lauf · locker","kind":"run","mode":"distance","dist":7000,"lo":570,"hi":630,"cue":"~9:30–10:15"},{"name":"Renntempo-Finish","kind":"run","mode":"distance","dist":3000,"lo":570,"hi":600,"cue":"~9:45/km"}]}]},{"num":"W14","title":"Aufbau","dates":"9.–14. Nov","phase":2,"vol":"~23 km","runs":[{"id":32,"type":"easy","label":"Dauerlauf","day":"Mo","date":"9. Nov","title":"5 km locker","disp":"≈ 5 km","segments":[{"name":"5 km locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":33,"type":"interval","label":"Intervalle","day":"Mi","date":"11. Nov","title":"Intervalle","disp":"≈ 7 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"4 min zügig (1/4)","kind":"run","mode":"time","dur":240,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"4 min zügig (2/4)","kind":"run","mode":"time","dur":240,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"4 min zügig (3/4)","kind":"run","mode":"time","dur":240,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Gehpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – gehen"},{"name":"4 min zügig (4/4)","kind":"run","mode":"time","dur":240,"lo":480,"hi":500,"cue":"8:00–8:20"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":34,"type":"long","label":"Langer Lauf","day":"Sa","date":"14. Nov","title":"11 km locker","disp":"≈ 11 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":11000,"lo":570,"hi":630,"cue":"locker · ~9:30–10:15"}]}]},{"num":"W15","title":"Progression","dates":"16.–21. Nov","phase":2,"vol":"~25 km","runs":[{"id":35,"type":"easy","label":"Dauerlauf","day":"Mo","date":"16. Nov","title":"6 km locker","disp":"≈ 6 km","segments":[{"name":"6 km locker","kind":"run","mode":"distance","dist":6000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":36,"type":"tempo","label":"Tempo","day":"Mi","date":"18. Nov","title":"Tempolauf","disp":"≈ 7 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"20 min am Stück","kind":"run","mode":"time","dur":1200,"lo":520,"hi":545,"cue":"8:40–9:05"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":37,"type":"long","label":"Langer Lauf","day":"Sa","date":"21. Nov","title":"12 km (Finish schnell)","disp":"≈ 12 km","segments":[{"name":"Langer Lauf · locker","kind":"run","mode":"distance","dist":8000,"lo":570,"hi":630,"cue":"~9:30–10:15"},{"name":"Renntempo-Finish","kind":"run","mode":"distance","dist":4000,"lo":570,"hi":600,"cue":"~9:45/km"}]}]},{"num":"W16","title":"Entlastung","dates":"23.–28. Nov","phase":2,"vol":"~18,5 km","runs":[{"id":38,"type":"easy","label":"Dauerlauf","day":"Mo","date":"23. Nov","title":"4 km sehr locker","disp":"≈ 4 km","segments":[{"name":"4 km sehr locker","kind":"run","mode":"distance","dist":4000,"lo":540,"hi":615,"cue":"~9:30–10:00"}]},{"id":39,"type":"easy","label":"Dauerlauf","day":"Mi","date":"25. Nov","title":"5 km + Steigerungen","disp":"≈ 5,5 km","segments":[{"name":"locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"locker · ~9:15–10:00"},{"name":"Steigerung (1/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (2/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (3/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (4/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"}]},{"id":40,"type":"long","label":"Langer Lauf","day":"Sa","date":"28. Nov","title":"9 km ruhig","disp":"≈ 9 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":9000,"lo":570,"hi":630,"cue":"locker · ~9:30–10:15"}]}]},{"num":"W17","title":"Lange Distanz","dates":"30. Nov–5. Dez","phase":2,"vol":"~26,5 km","runs":[{"id":41,"type":"easy","label":"Dauerlauf","day":"Mo","date":"30. Nov","title":"6 km locker","disp":"≈ 6 km","segments":[{"name":"6 km locker","kind":"run","mode":"distance","dist":6000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":42,"type":"tempo","label":"Tempo","day":"Mi","date":"2. Dez","title":"Tempolauf","disp":"≈ 7,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"10 min Tempo (1/2)","kind":"run","mode":"time","dur":600,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"10 min Tempo (2/2)","kind":"run","mode":"time","dur":600,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":43,"type":"long","label":"Langer Lauf","day":"Sa","date":"5. Dez","title":"13 km locker","disp":"≈ 13 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":13000,"lo":570,"hi":630,"cue":"sehr ruhig · ~9:30–10:15"}]}]},{"num":"W18","title":"Renntempo-Block","dates":"7.–12. Dez","phase":2,"vol":"~27 km","runs":[{"id":44,"type":"easy","label":"Dauerlauf","day":"Mo","date":"7. Dez","title":"6 km locker","disp":"≈ 6 km","segments":[{"name":"6 km locker","kind":"run","mode":"distance","dist":6000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":45,"type":"tempo","label":"Renntempo","day":"Mi","date":"9. Dez","title":"Renntempo-Lauf","disp":"≈ 7 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"5 km im 15k-Renntempo","kind":"run","mode":"distance","dist":5000,"lo":570,"hi":600,"cue":"~9:45/km"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":46,"type":"long","label":"Langer Lauf","day":"Sa","date":"12. Dez","title":"14 km locker","disp":"≈ 14 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":14000,"lo":570,"hi":630,"cue":"Verpflegung testen · ~9:30–10:15"}]}]},{"num":"W19","title":"Peak · Generalprobe","dates":"14.–19. Dez","phase":2,"vol":"~26,5 km","runs":[{"id":47,"type":"easy","label":"Dauerlauf","day":"Mo","date":"14. Dez","title":"5 km locker","disp":"≈ 5 km","segments":[{"name":"5 km locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":48,"type":"tempo","label":"Tempo","day":"Mi","date":"16. Dez","title":"Tempolauf","disp":"≈ 6,5 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"8 min Tempo (1/2)","kind":"run","mode":"time","dur":480,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":120,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"8 min Tempo (2/2)","kind":"run","mode":"time","dur":480,"lo":510,"hi":540,"cue":"8:30–9:00"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":49,"type":"long","label":"Langer Lauf","day":"Sa","date":"19. Dez","title":"15 km Generalprobe","disp":"≈ 15 km","segments":[{"name":"Langer Lauf · locker","kind":"run","mode":"distance","dist":12000,"lo":570,"hi":630,"cue":"~9:30–10:15"},{"name":"Renntempo-Finish","kind":"run","mode":"distance","dist":3000,"lo":570,"hi":600,"cue":"~9:45/km"}]}]},{"num":"W20","title":"Taper","dates":"21.–26. Dez","phase":2,"vol":"~21 km","runs":[{"id":50,"type":"easy","label":"Dauerlauf","day":"Mo","date":"21. Dez","title":"5 km locker","disp":"≈ 5 km","segments":[{"name":"5 km locker","kind":"run","mode":"distance","dist":5000,"lo":540,"hi":615,"cue":"~9:15–10:00"}]},{"id":51,"type":"tempo","label":"Renntempo","day":"Mi","date":"23. Dez","title":"Renntempo kurz","disp":"≈ 6 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"5 min Tempo (1/3)","kind":"run","mode":"time","dur":300,"lo":570,"hi":600,"cue":"~9:45/km"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"5 min Tempo (2/3)","kind":"run","mode":"time","dur":300,"lo":570,"hi":600,"cue":"~9:45/km"},{"name":"Trabpause","kind":"recovery","mode":"time","dur":90,"lo":null,"hi":null,"cue":"Erholung – locker traben"},{"name":"5 min Tempo (3/3)","kind":"run","mode":"time","dur":300,"lo":570,"hi":600,"cue":"~9:45/km"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker oder langsamer"}]},{"id":52,"type":"long","label":"Langer Lauf","day":"Sa","date":"26. Dez","title":"10 km locker","disp":"≈ 10 km","segments":[{"name":"Langer Lauf","kind":"run","mode":"distance","dist":10000,"lo":570,"hi":630,"cue":"letzter längerer Lauf · ~9:30–10:15"}]}]},{"num":"W21","title":"Renn-Woche 🎆","dates":"28.–31. Dez","phase":2,"vol":"Mo/Mi + Rennen","runs":[{"id":53,"type":"easy","label":"Dauerlauf","day":"Mo","date":"28. Dez","title":"4 km sehr locker","disp":"≈ 4 km","segments":[{"name":"4 km sehr locker","kind":"run","mode":"distance","dist":4000,"lo":540,"hi":615,"cue":"~9:30–10:00"}]},{"id":54,"type":"easy","label":"Dauerlauf","day":"Mi","date":"30. Dez","title":"Shakeout 3 km","disp":"≈ 3,5 km","segments":[{"name":"locker","kind":"run","mode":"distance","dist":3000,"lo":540,"hi":615,"cue":"locker · ~9:15–10:00"},{"name":"Steigerung (1/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (2/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (3/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"},{"name":"locker traben","kind":"recovery","mode":"time","dur":40,"lo":null,"hi":null,"cue":"locker"},{"name":"Steigerung (4/4)","kind":"run","mode":"time","dur":20,"lo":null,"hi":null,"cue":"zügig, sauber – kein Sprint"}]},{"id":55,"type":"race","label":"Silvesterlauf","day":"Do","date":"31. Dez","title":"Silvesterlauf 15 km 🎆","disp":"≈ 16 km","segments":[{"name":"Aufwärmen · einlaufen","kind":"run","mode":"distance","dist":1000,"lo":540,"hi":615,"cue":"locker · nicht schneller als 9:00"},{"name":"km 1–5 · kontrolliert","kind":"run","mode":"distance","dist":5000,"lo":570,"hi":600,"cue":"~10:00 – langsam starten!"},{"name":"km 6–12 · Rhythmus","kind":"run","mode":"distance","dist":7000,"lo":570,"hi":600,"cue":"~9:45/km"},{"name":"km 13–15 · alles geben","kind":"run","mode":"distance","dist":3000,"lo":null,"hi":null,"cue":"Vollgas rein nach Soest 🎆"},{"name":"Cool-down · auslaufen","kind":"run","mode":"distance","dist":500,"lo":540,"hi":615,"cue":"locker oder langsamer"}]}]}]};</script>
+<script>
+const $=id=>document.getElementById(id);
+const CHEV='<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>';
+const PLAY='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+const BADGEcls={easy:'easy',long:'long',tempo:'tempo',interval:'interval',race:'race'};
+
+function fmtPace(sp){if(sp==null||!isFinite(sp)||sp<=0)return '--:--';sp=Math.round(sp);let m=Math.floor(sp/60),s=sp%60;return m+':'+String(s).padStart(2,'0');}
+function fmtTime(ms){let t=Math.floor(ms/1000),h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;return h>0?(h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')):(m+':'+String(s).padStart(2,'0'));}
+function segLine(seg){let t=seg.mode==='time'?(seg.dur>=60?(seg.dur/60)+' min':seg.dur+' s'):(seg.dist>=1000?(seg.dist/1000).toString().replace('.',',')+' km':seg.dist+' m');return seg.name.replace(/ \(\d+\/\d+\)/,'')+' · '+t;}
+
+// ---------- render plan ----------
+function renderPlan(){
+ let h='<header><div class="kicker">Trainingsplan · 5 km → 15 km</div><h1>5K → 15K</h1>'+
+   '<div class="sub">Silvesterlauf Werl–Soest · 15 km · 31. Dez 2026</div></header><div class="wrap">'+
+   '<div class="info"><b>So funktioniert\u2019s:</b> Lauf w\u00e4hlen \u2192 <b>Start</b> tippen \u2192 GPS misst Pace, Zeit &amp; Distanz. '+
+   'Die Ampel zeigt, ob du im Zielbereich bist; bei jedem Abschnittswechsel piept es kurz. '+
+   '<b>Bildschirm muss an bleiben</b> \u2013 iOS friert Web-Apps im Hintergrund ein.</div>';
+ let phase=0;
+ PLAN.weeks.forEach(w=>{
+   if(w.phase!==phase){phase=w.phase;
+     h+= phase===1
+       ? '<div class="pbanner p1"><div class="pph">Phase 1 — 5 km · bis 4. Okt</div><div class="ptitle">Basis &amp; Speed</div><div class="pmeta">2×/Woche · Do + So</div></div>'
+       : '<div class="pbanner p2"><div class="pph">Phase 2 — 15 km · bis 31. Dez</div><div class="ptitle">Silvesterlauf</div><div class="pmeta">3×/Woche · Mo · Mi · Sa</div></div>';
+   }
+   h+='<details class="week"><summary><span class="wknum">'+w.num+'</span>'+
+      '<div style="flex:1"><div class="wktitle">'+w.title+'</div><div class="wkmeta">'+w.dates+' · '+w.vol+'</div></div>'+CHEV+'</summary><div class="wkbody">';
+   w.runs.forEach(r=>{
+     let segtxt=r.segments.map(segLine).filter((v,i,a)=>a.indexOf(v)===i).join(' · ');
+     h+='<div class="run '+r.type+'"><div class="rhead"><span class="rday">'+r.day+' · '+r.date+'</span>'+
+        '<span class="badge '+BADGEcls[r.type]+'">'+r.label+'</span></div>'+
+        '<div class="rtitle">'+r.title+'</div><div class="rsegs">'+segtxt+'</div>'+
+        '<button class="startbtn" onclick="startRun('+r.id+')">'+PLAY+' Jetzt starten</button></div>';
+   });
+   h+='</div></details>';
+ });
+ h+='<footer>GPS-Pace schwankt naturgem\u00e4\u00df \u2013 die Anzeige ist gegl\u00e4ttet. Pace nach Gef\u00fchl, nicht sklavisch nach Zahl.</footer></div>';
+ $('app').innerHTML=h;
+}
+function findRun(id){for(const w of PLAN.weeks)for(const r of w.runs)if(r.id===id)return r;}
+
+// ---------- audio beep ----------
+let actx=null;
+function initAudio(){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+function beep(freq=880,dur=0.16){if(!actx)return;try{if(actx.state==='suspended')actx.resume();
+ let o=actx.createOscillator(),g=actx.createGain();o.frequency.value=freq;o.type='sine';
+ o.connect(g);g.connect(actx.destination);g.gain.setValueAtTime(0.0001,actx.currentTime);
+ g.gain.exponentialRampToValueAtTime(0.35,actx.currentTime+0.02);
+ g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+dur);
+ o.start();o.stop(actx.currentTime+dur+0.02);}catch(e){}}
+
+// ---------- run engine ----------
+let S=null, wakeLock=null, tickTimer=null;
+
+async function startRun(id){
+ const run=findRun(id); if(!run)return;
+ initAudio(); beep(660,0.08);
+ S={run,segs:run.segments,idx:0,totalMs:0,segMs:0,totalDist:0,segStartDist:0,
+    paused:false,lastTick:performance.now(),lastPos:null,samples:[],kmSplits:[],nextKm:1000,watchId:null,finished:false};
+ $('p-title').textContent=run.title;
+ $('player').classList.add('on'); $('summary').style.display='none';
+ requestWake();
+ startGPS();
+ updateSeg(); renderTick();
+ tickTimer=setInterval(loop,200);
+ document.addEventListener('visibilitychange',onVis);
+}
+function onVis(){ if(document.visibilityState==='visible'){requestWake(); if(actx&&actx.state==='suspended')actx.resume(); S&&(S.lastTick=performance.now());} }
+
+async function requestWake(){try{if('wakeLock'in navigator){wakeLock=await navigator.wakeLock.request('screen');}}catch(e){}}
+function releaseWake(){try{wakeLock&&wakeLock.release();}catch(e){}wakeLock=null;}
+
+function startGPS(){
+ if(!('geolocation'in navigator)){$('p-state').textContent='Kein GPS verf\u00fcgbar';return;}
+ S.watchId=navigator.geolocation.watchPosition(onPos,onGeoErr,{enableHighAccuracy:true,maximumAge:1000,timeout:15000});
+}
+function onGeoErr(e){$('p-state').textContent='GPS: '+(e.code===1?'Zugriff verweigert':'kein Signal');}
+function haversine(a,b){const R=6371000,tr=Math.PI/180;
+ const dLat=(b.lat-a.lat)*tr,dLon=(b.lon-a.lon)*tr,la1=a.lat*tr,la2=b.lat*tr;
+ const x=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLon/2)**2;
+ return 2*R*Math.asin(Math.sqrt(x));}
+function onPos(p){
+ if(!S||S.finished)return;
+ const cur={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy,t:performance.now()};
+ if(S.lastPos && !S.paused){
+   const d=haversine(S.lastPos,cur), dt=(cur.t-S.lastPos.t)/1000;
+   // filter jumps: ignore bad accuracy or implausible speed (>6 m/s ~ 2:46/km sprint cap)
+   if(cur.acc<=35 && d>0.3 && dt>0 && d/dt<6){
+     S.totalDist+=d;
+     S.samples.push({t:cur.t,d:S.totalDist});
+     if(S.samples.length>240)S.samples.shift();
+     while(S.totalDist>=S.nextKm){S.kmSplits.push({km:S.nextKm/1000,ms:S.totalMs});S.nextKm+=1000;}
+   }
+ }
+ S.lastPos=cur;
+}
+function curPace(){ // smoothed sec/km over trailing ~15s
+ if(!S||S.samples.length<2)return null;
+ const now=performance.now(), cutoff=now-15000;
+ let old=S.samples[0];
+ for(let i=S.samples.length-1;i>=0;i--){if(S.samples[i].t<=cutoff){old=S.samples[i];break;}}
+ const dd=S.totalDist-old.d, dts=(now-old.t)/1000;
+ if(dd<8||dts<=0)return null;
+ return (dts/dd)*1000;
+}
+function loop(){
+ if(!S||S.finished)return;
+ const now=performance.now(), dt=now-S.lastTick; S.lastTick=now;
+ if(!S.paused){S.totalMs+=dt; S.segMs+=dt;}
+ // segment advance
+ const seg=S.segs[S.idx];
+ if(!S.paused){
+   if(seg.mode==='time' && S.segMs>=seg.dur*1000){nextSeg();}
+   else if(seg.mode==='distance' && (S.totalDist-S.segStartDist)>=seg.dist){nextSeg();}
+ }
+ renderTick();
+}
+function nextSeg(){
+ if(S.idx>=S.segs.length-1){finishRun();return;}
+ S.idx++; S.segMs=0; S.segStartDist=S.totalDist; beep(880,0.16);
+ updateSeg();
+}
+function updateSeg(){
+ const seg=S.segs[S.idx];
+ $('p-segcount').textContent='Abschnitt '+(S.idx+1)+' / '+S.segs.length;
+ $('p-segname').textContent=seg.name.replace(/ \(\d+\/\d+\)/,m=>m);
+ $('p-segcue').textContent=seg.cue||'';
+}
+function renderTick(){
+ if(!S)return; const seg=S.segs[S.idx];
+ // segment big + progress
+ if(seg.mode==='time'){
+   const rem=Math.max(0,seg.dur-S.segMs/1000);
+   $('p-segbig').textContent=fmtTime(rem*1000);
+   $('p-segprog').style.width=Math.min(100,(S.segMs/1000)/seg.dur*100)+'%';
+ }else{
+   const done=S.totalDist-S.segStartDist, rem=Math.max(0,seg.dist-done);
+   $('p-segbig').textContent=(rem>=1000?(rem/1000).toFixed(2).replace('.',','):Math.round(rem))+(rem>=1000?' km':' m');
+   $('p-segprog').style.width=Math.min(100,done/seg.dist*100)+'%';
+ }
+ // metrics
+ $('p-time').textContent=fmtTime(S.totalMs);
+ $('p-dist').textContent=(S.totalDist/1000).toFixed(2).replace('.',',');
+ const avg=S.totalDist>50?(S.totalMs/1000)/(S.totalDist/1000):null;
+ $('p-avg').textContent=fmtPace(avg);
+ // ampel
+ const cp=curPace();
+ $('p-pace').textContent=fmtPace(cp);
+ const am=$('p-ampel'), stt=$('p-state');
+ let cls='grey',label='—';
+ if(seg.lo==null){cls='grey';label=seg.kind==='recovery'?'Erholung':'freies Tempo';}
+ else if(cp==null){cls='grey';label='messe…';}
+ else if(cp<seg.lo){cls='red';label='zu schnell';}
+ else if(cp>seg.hi){cls='amber';label=seg.kind==='recovery'?'ok':'etwas schneller';}
+ else {cls='green';label='im Ziel';}
+ am.className='ampel '+cls; stt.className='astate '+cls; stt.textContent=label;
+}
+function pauseToggle(){if(!S)return;S.paused=!S.paused;$('p-pause').textContent=S.paused?'Weiter':'Pause';if(!S.paused)S.lastTick=performance.now();}
+function stopRun(){finishRun();}
+function finishRun(){
+ if(!S)return; S.finished=true;
+ clearInterval(tickTimer); tickTimer=null;
+ if(S.watchId!=null)navigator.geolocation.clearWatch(S.watchId);
+ document.removeEventListener('visibilitychange',onVis);
+ releaseWake(); beep(520,0.3);
+ showSummary(); 
+ $('player').classList.remove('on');
+}
+function showSummary(){
+ const avg=S.totalDist>50?(S.totalMs/1000)/(S.totalDist/1000):null;
+ let splits='';
+ if(S.kmSplits.length){let prev=0;
+   splits='<div style="margin-top:16px"><div class="segcount" style="text-align:left">Kilometer-Splits</div>';
+   S.kmSplits.forEach(k=>{const p=(k.ms-prev)/1000;prev=k.ms;
+     splits+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--line);font-size:14px"><span style="color:var(--muted)">km '+k.km+'</span><b style="font-family:\'Barlow Condensed\'">'+fmtPace(p)+' /km</b></div>';});
+   splits+='</div>';
+ }
+ $('summary').innerHTML=
+  '<div class="kicker" style="color:var(--muted)">Lauf beendet</div>'+
+  '<h1 style="font-size:34px;margin:4px 0 14px">'+S.run.title+'</h1>'+
+  '<div class="mrow"><div class="mcell"><div class="ml">Distanz</div><div class="mv">'+(S.totalDist/1000).toFixed(2).replace('.',',')+' km</div></div>'+
+  '<div class="mcell"><div class="ml">Zeit</div><div class="mv">'+fmtTime(S.totalMs)+'</div></div>'+
+  '<div class="mcell"><div class="ml">Ø Pace</div><div class="mv">'+fmtPace(avg)+'</div></div></div>'+
+  splits+
+  '<div class="info" style="margin-top:18px">Nichts wird gespeichert \u2013 mach dir bei Bedarf einen Screenshot.</div>'+
+  '<button class="startbtn" style="background:var(--long);color:#07101f;margin-top:6px" onclick="closeSummary()">Zur\u00fcck zum Plan</button>';
+ $('summary').style.display='block';
+ S=null;
+}
+function closeSummary(){$('summary').style.display='none';}
+
+// buttons
+document.addEventListener('DOMContentLoaded',()=>{
+ renderPlan();
+ $('p-pause').onclick=pauseToggle;
+ $('p-stop').onclick=stopRun;
+ $('p-skip').onclick=()=>{if(S)nextSeg();};
+ $('p-min').onclick=()=>{ if(confirm('Lauf abbrechen und zur\u00fcck zum Plan?')) finishRun(); };
+});
+</script>
+</body>
+</html>
